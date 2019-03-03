@@ -113,7 +113,7 @@ public class RelationsAnalyzer {
     public void analyze(){
         this.setEqualRelations();
         this.setLessRelations();
-        System.out.println("Relations = finished");
+        System.out.println("Relations established");
     }
 
     public ArrayList<LinguisticUnit> lastPlus(NonTerminal nonTerminal){

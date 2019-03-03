@@ -95,9 +95,7 @@ public class SyntaxAnalyzerBottomUp {
 
         }
 
-        System.out.println("Done");
-        System.out.println("Done");
-        System.out.println("Done");
+        System.out.println("Syntax analyze finished");
 
     }
 

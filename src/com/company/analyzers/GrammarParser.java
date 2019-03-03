@@ -48,7 +48,7 @@ public class GrammarParser {
 
         this.createTable();
 
-        System.out.println("Grammar parsed!");
+        System.out.println("Grammar parsed");
     }
 
     private void createTable() {

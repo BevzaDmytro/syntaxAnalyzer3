@@ -35,7 +35,6 @@ public class Parser {
     public void parse(BufferedReader reader) throws Exception {
         boolean definition = true;
 
-         System.out.println("NICE");
         char symbol = ' ';
         this.state = 1;
         int line = 1;
@@ -173,14 +172,7 @@ public class Parser {
                         this.state = 5;
                     }
                     else{
-                        Lexem newLex = new Lexem(this.lexem, "CON", line);
-                        this.constantsTable.constantType(newLex);
-                        this.constantsTable.addConstant(newLex);
-                        newLex.setCONCode(this.constantsTable.getNumberOfLexem(newLex));
-                        newLex.setCode(101);
-                        this.lexemsTable.addLexem(newLex);
-                        this.hasToRead = false;
-                        this.state = 1;
+                        newConstant(line);
                     }
                     break;
 
@@ -203,14 +195,7 @@ public class Parser {
                         this.lexem += Character.toString(symbol);
                     }
                     else{
-                        Lexem newLex = new Lexem(this.lexem, "CON", line);
-                        this.constantsTable.constantType(newLex);
-                        this.constantsTable.addConstant(newLex);
-                        newLex.setCONCode(this.constantsTable.getNumberOfLexem(newLex));
-                        newLex.setCode(101);
-                        this.lexemsTable.addLexem(newLex);
-                        this.hasToRead = false;
-                        this.state = 1;
+                        newConstant(line);
                     }
                     break;
 
@@ -220,32 +205,14 @@ public class Parser {
                         this.state =5;
                     }
                     else{
-                        Lexem newLex = new Lexem(this.lexem, "CON", line);
-                        this.constantsTable.constantType(newLex);
-                        this.constantsTable.addConstant(newLex);
-                        newLex.setCONCode(this.constantsTable.getNumberOfLexem(newLex));
-                        newLex.setCode(101);
-                        this.lexemsTable.addLexem(newLex);
-                        this.hasToRead = false;
-                        this.state = 1;
+                        newConstant(line);
                     }
                     break;
 
                 case 7:
                     Lexem newLex = new Lexem(this.lexem, "Delimiter", line);
                     if(checker.isLessMark(symbol) || checker.isEqualMark(symbol)){
-                        this.lexem += Character.toString(symbol);
-                        newLex = new Lexem(this.lexem, "Delimiter", line);
-
-                        if(this.inputLexemTable.isContain(newLex)) {
-                            newLex.setCode(this.inputLexemTable.getCode(newLex));
-                            this.lexemsTable.addLexem(newLex);
-                        }
-                        else throw new Exception("Not declarated in lexems table");
-//                        System.out.println("Lexem added: " + this.lexem);
-
-                        this.lexem = "";
-                        this.state = 1;
+                        newDelimiter(symbol, line);
                     }
                     else{
                         if(this.inputLexemTable.isContain(newLex)) {
@@ -261,18 +228,7 @@ public class Parser {
                 case 8:
                      newLex = new Lexem(this.lexem, "Delimiter", line);
                     if(checker.isGreatMark(symbol) || checker.isEqualMark(symbol)){
-                        this.lexem += Character.toString(symbol);
-
-
-                        newLex = new Lexem(this.lexem, "Delimiter", line);
-                        if(this.inputLexemTable.isContain(newLex)) {
-                            newLex.setCode(this.inputLexemTable.getCode(newLex));
-                            this.lexemsTable.addLexem(newLex);
-                        }
-                        else throw new Exception("Not declarated in lexems table");
-
-                        this.lexem = "";
-                        this.state = 1;
+                        newDelimiter(symbol, line);
                     }
                     else{
                         if(this.inputLexemTable.isContain(newLex)) {
@@ -288,18 +244,7 @@ public class Parser {
                 case 9:
                     newLex = new Lexem(this.lexem, "Delimiter", line);
                     if(checker.isEqualMark(symbol)){
-                        this.lexem += Character.toString(symbol);
-
-                        newLex = new Lexem(this.lexem, "Delimiter", line);
-                        if(this.inputLexemTable.isContain(newLex)) {
-                            newLex.setCode(this.inputLexemTable.getCode(newLex));
-                            this.lexemsTable.addLexem(newLex);
-                        }
-                        else throw new Exception("Not declarated in lexems table");
-
-
-                        this.lexem = "";
-                        this.state = 1;
+                        newDelimiter(symbol, line);
                     }
                     else{
 
@@ -352,6 +297,30 @@ public class Parser {
         }
 
 
+    }
+
+    private void newDelimiter(char symbol, int line) throws Exception {
+        Lexem newLex;
+        this.lexem += Character.toString(symbol);
+        newLex = new Lexem(this.lexem, "Delimiter", line);
+        if(this.inputLexemTable.isContain(newLex)) {
+            newLex.setCode(this.inputLexemTable.getCode(newLex));
+            this.lexemsTable.addLexem(newLex);
+        }
+        else throw new Exception("Not declarated in lexems table");
+        this.lexem = "";
+        this.state = 1;
+    }
+
+    private void newConstant(int line) throws Exception {
+        Lexem newLex = new Lexem(this.lexem, "CON", line);
+        this.constantsTable.constantType(newLex);
+        this.constantsTable.addConstant(newLex);
+        newLex.setCONCode(this.constantsTable.getNumberOfLexem(newLex));
+        newLex.setCode(101);
+        this.lexemsTable.addLexem(newLex);
+        this.hasToRead = false;
+        this.state = 1;
     }
 
     public LexemsTable getLexemsTable() {
