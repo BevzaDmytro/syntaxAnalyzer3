@@ -63,7 +63,7 @@ public class MyFrame {
     }
 
     private void analyze(boolean isFile, String text) throws Exception {
-        Controller controller = new Controller();
+        Controller controller = new Controller(this);
         controller.run(isFile, text);
 //        MyFrame.this.show(controller.getParser().getLexemsTable().getLexems(), controller.getParser().getIdentificatorsTable().getLexems(), controller.getParser().getConstantsTable().getLexems());
         MyFrame.this.show(controller.getParser().getLexemsTable().getLexems(), controller.getParser().getIdentificatorsTable().getLexems(), controller.getParser().getConstantsTable().getLexems(),controller.getRelationsAnalyzer().getRelations(), controller.getSyntaxAnalyzerBottomUp().getAnalyzeLog());

@@ -1,6 +1,7 @@
 package com.company.analyzers;
 
 import com.company.extensions.*;
+import com.company.views.MyFrame;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -14,6 +15,11 @@ public class SyntaxAnalyzerBottomUp {
     private ArrayList<Rule> rules;
     private ArrayList<PassOfSyntaxAnalyzer> analyzeLog;
     private String currentRelation;
+    private MyFrame frame;
+
+    public SyntaxAnalyzerBottomUp(MyFrame frame) {
+        this.frame = frame;
+    }
 
     public ArrayList<Rule> getRules() {
         return rules;
@@ -29,6 +35,8 @@ public class SyntaxAnalyzerBottomUp {
 
     public void setRules(ArrayList<Rule> rules) {
         this.rules = rules;
+        this.stack = new Stack<>();
+        analyzeLog = new ArrayList<>();
     }
 
     public SyntaxAnalyzerBottomUp() {
@@ -61,11 +69,16 @@ public class SyntaxAnalyzerBottomUp {
                     possibleBasis.add(previousItem);
                     nextItem = previousItem;
                     previousItem = this.stack.pop();
+                    this.analyzeLog.add(new PassOfSyntaxAnalyzer(this.stack.toString(), this.currentRelation, this.lexems.get(counter).getName()));
                 }
 
                 String replacement = this.findTheReplacement(possibleBasis);
+                if(replacement.equals("")) this.frame.setStatus("Unexcpected operator on line " + this.lexems.get(counter-1).getLine());
+
+
                 this.stack.push(previousItem);
                 this.stack.push(replacement);
+                this.analyzeLog.add(new PassOfSyntaxAnalyzer(this.stack.toString(), this.currentRelation, this.lexems.get(counter).getName()));
                 previousItem = replacement;
                 nextItem = nextInputItem;
 
