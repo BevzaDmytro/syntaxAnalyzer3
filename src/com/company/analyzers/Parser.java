@@ -29,26 +29,13 @@ public class Parser {
     }
 
     
-    public BufferedReader textToParse(boolean isFile, String text){
-        BufferedReader reader = null;
-        if(isFile){
-            try {
-                reader = new BufferedReader(new FileReader(new File(text)));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        else{
-            reader = new BufferedReader(new StringReader(text));
-        }
-        return reader;
-    }
 
-    public void parse(boolean isFile, String text) throws Exception {
-        BufferedReader reader = this.textToParse(isFile, text);
+
+
+    public void parse(BufferedReader reader) throws Exception {
         boolean definition = true;
 
-        System.out.println("NICE");
+         System.out.println("NICE");
         char symbol = ' ';
         this.state = 1;
         int line = 1;
@@ -364,11 +351,6 @@ public class Parser {
 
         }
 
-//        this.lexemsTable.showTable();
-//        System.out.println("IDN");
-//        this.identificatorsTable.showTable();
-//        System.out.println("CON");
-//        this.constantsTable.showTable();
 
     }
 

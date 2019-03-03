@@ -4,6 +4,11 @@ import com.company.analyzers.Parser;
 import com.company.analyzers.*;
 import com.company.views.MyFrame;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.StringReader;
+
 public class Controller {
     private Parser parser;
     private GrammarParser grammarParser;
@@ -19,6 +24,8 @@ public class Controller {
         this.parser = new Parser();
         this.grammarParser =  new GrammarParser();
         this.syntaxAnalyzerBottomUp = new SyntaxAnalyzerBottomUp();
+        this.frame = new MyFrame(this);
+
     }
 
     public Controller(MyFrame frame) {
@@ -34,9 +41,30 @@ public class Controller {
 
 
 
-    public void run(boolean isFile, String text) throws Exception {
-        this.parser.parse(isFile, text);
 
+    public void execute(){
+
+        frame.input();
+    }
+
+    public void analyzeFile(String path){
+        try {
+            this.parser.parse(new BufferedReader(new FileReader(new File(path))));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.analyzeSyntax();
+    }
+    public void analyzeText(String text){
+        try {
+            this.parser.parse(new BufferedReader(new StringReader(text)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.analyzeSyntax();
+    }
+
+    private void analyzeSyntax(){
         try {
             this.grammarParser.parseGrammar();
         } catch (Exception e) {
@@ -50,7 +78,7 @@ public class Controller {
         this.syntaxAnalyzerBottomUp.setRelations(this.relationsAnalyzer.getRelations());
         this.syntaxAnalyzerBottomUp.setRules(this.relationsAnalyzer.getRules());
         this.syntaxAnalyzerBottomUp.analyze();
-
+        frame.show(this.getParser().getLexemsTable().getLexems(), this.getParser().getIdentificatorsTable().getLexems(), this.getParser().getConstantsTable().getLexems(),this.getRelationsAnalyzer().getRelations(), this.getSyntaxAnalyzerBottomUp().getAnalyzeLog());
     }
 
     public RelationsAnalyzer getRelationsAnalyzer() {

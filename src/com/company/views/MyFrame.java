@@ -29,12 +29,12 @@ public class MyFrame {
     private JPanel panel4;
     private JPanel panel5;
     private JTextArea status;
+    private Controller controller;
 
 
-    public MyFrame() {
+    public MyFrame(Controller controller) {
+        this.controller = controller;
         this.frame =  new JFrame("Lab 5");
-//        this.frame.getContentPane().setLayout(new FlowLayout());
-//        this.frame.getContentPane().setLayout(new FlowLayout());
         this.frame.setSize(800, 600);
         this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,17 +62,8 @@ public class MyFrame {
         this.panel.repaint();
     }
 
-    private void analyze(boolean isFile, String text) throws Exception {
-        Controller controller = new Controller(this);
-        controller.run(isFile, text);
-//        MyFrame.this.show(controller.getParser().getLexemsTable().getLexems(), controller.getParser().getIdentificatorsTable().getLexems(), controller.getParser().getConstantsTable().getLexems());
-        MyFrame.this.show(controller.getParser().getLexemsTable().getLexems(), controller.getParser().getIdentificatorsTable().getLexems(), controller.getParser().getConstantsTable().getLexems(),controller.getRelationsAnalyzer().getRelations(), controller.getSyntaxAnalyzerBottomUp().getAnalyzeLog());
 
-        this.setStatus("Well done, everything work clear");
-
-    }
-
-    public void inputData(){
+    public void input(){
         JPanel input = new JPanel();
         input.setLayout(null);
         ButtonGroup group = new ButtonGroup();
@@ -123,7 +114,7 @@ public class MyFrame {
                                     in.setEditable(true);
                                     in.setEnabled(true);
                                     panel.repaint();
-                                    MyFrame.this.analyze(true, selectedFile.getPath());
+                                    controller.analyzeFile(selectedFile.getPath());
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -140,7 +131,7 @@ public class MyFrame {
                             public void actionPerformed(ActionEvent event) {
                                 String text = in.getText();
                                 try {
-                                    MyFrame.this.analyze(false, text);
+                                    controller.analyzeText(text);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -157,11 +148,6 @@ public class MyFrame {
         button1.addActionListener(listener);
         button2.addActionListener(listener);
 
-//        input.add(in);
-//        input.add(insertButton);
-//        input.add(browse);
-//        input.add(button1);
-//        input.add(button2);
 
         in.setBounds(10,10,500,300);
 
@@ -183,6 +169,7 @@ public class MyFrame {
         this.frame.add(this.panel);
         this.frame.setVisible(true);
     }
+
 
     public void show(ArrayList<Lexem> lexemsTable, ArrayList<Lexem> IDNTable, ArrayList<Lexem> CONTable, Map<String, Map<String, String>> relations, ArrayList<PassOfSyntaxAnalyzer> analyzeLog){
 
